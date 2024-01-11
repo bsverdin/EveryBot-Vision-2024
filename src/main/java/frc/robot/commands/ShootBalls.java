@@ -4,14 +4,14 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.Constants.ShootBalls.*;
 
-public class ShootBalls extends Command {
+public class ShootBalls extends CommandBase {
 
     private Intake intake;
     private Shooter aim;
@@ -114,14 +114,16 @@ public class ShootBalls extends Command {
             // Shoot balls
             Commands.deadline(
                 Commands.waitSeconds(1),
-                Commands.run(() -> fire.fireTurret(0.5), fire)
+                Commands.run(() -> fire1.fireTurret(0.5), fire1)
+                ommands.run(() -> fire2.fireTurret(0.5), fire2)
             ),
 
             // Stop intake
-            Commands.runOnce(() -> fire.fireTurret(0), fire),
+            Commands.runOnce(() -> fire1.fireTurret(0), fire1),
+            Commands.runOnce(() -> fire2.fireTurret(0), fire2),
             intakeNote = false;
         ).handleInterrupt(() -> {
-            shoot.setTurret(0);
+            aim.aimTurret(0);
             intake.setIntake(0);
         }).schedule();
     }
