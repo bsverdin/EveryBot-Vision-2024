@@ -33,10 +33,9 @@ public class Constants {
     }
     public static class ShootBalls{
         //ShootBalls in this instance would be replaced by the angled shooter
-        public static final double ampAngle;//put angle for shooter to shoot in amp here
-        public static final double speakerAngle;//put angle for shooter to shoot in speaker here
-        public static final double trapAngle;//put angle for shooter to shoot in trap here
-        public static final double degreePerSecond = 0.00002612330198;//degree per second when speed is 1.0
+        public static final int ampAngle;//put angle for shooter to shoot in amp here
+        public static final int speakerAngle;//put angle for shooter to shoot in speaker here
+        public static final int trapAngle;//put angle for shooter to shoot in trap here
     }
 
     public static class SearchForTag {
@@ -89,3 +88,4 @@ public class Constants {
     }
 
 }
+
