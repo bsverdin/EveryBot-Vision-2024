@@ -16,7 +16,8 @@ public class ShootBalls extends CommandBase {
 
     private Intake intake;
     private Shooter aim;
-    private Shooter fire;
+    private Shooter fire1;
+    private Shooter fire2;
     CanCoder _coder = new CanCoder(1);
     int degrees = _coder.getPosition();
 
@@ -162,3 +163,4 @@ public class ShootBalls extends CommandBase {
         }).schedule();
     }
 }
+
