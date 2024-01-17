@@ -10,24 +10,20 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.Constants.ShootBalls.*;
+import com.ctre.phoenix.sensors.Cancoder;
 
 public class ShootBalls extends CommandBase {
 
     private Intake intake;
     private Shooter aim;
     private Shooter fire;
+    CanCoder _coder = new CanCoder(1);
+    int degrees = _coder.getPosition();
 
-    public ShootBalls(Intake intake) {
+    public ShootBalls(Intake intake, Shooter shooter) {
         this.intake = intake;
-        addRequirements(intake);
-    }
-    public ShootBalls(Shooter aim) {
-        this.aim = aim;
-        addRequirements(aim);
-    }
-    public ShootBalls(Shooter fire) {
-        this.fire = fire;
-        addRequirements(fire);
+        this.shooter = shooter;
+        addRequirements(intake, shooter);
     }
 
     @Override
@@ -36,76 +32,112 @@ public class ShootBalls extends CommandBase {
             // Move arm up
             if(DriverStation.getAlliance() == Alliance.Red){
                 if ((tid == 5 || tid == 4 || tid == 3) && intakeNote == true){
-                    if ((tid == 5 && currentAngle < ampAngle) || ((tid == 4 || tid == 3) && currentAngle < speakerAngle)){ //need to create a variable for the current angle
+                    if (tid == 5 && degree < ampAngle){ 
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
-                            Commands.run(() -> aim.aimTurret(0.5), aim)
+                            while (degree < ampAngle){
+                            Commands.run(() -> aim.aimTurret(0.5), aim);
+                            }
                         ),
                     }
-                    else if ((tid == 5 && currentAngle > ampAngle) || ((tid == 4 || tid == 3) && currentAngle > speakerAngle)){
+                    else if (tid == 5 && degree > ampAngle){
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
-                            Commands.run(() -> aim.aimTurret(0.5), aim)
+                            Commands.run(() -> aim.aimTurret(-0.5), aim)
                         ),
                     }
                 }
+                else if ((tid == 4 || tid == 3) && degree < speakerAngle){
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        while (degree < speakerAngle){
+                        Commands.run(() -> aim.aimTurret(0.5), aim);
+                        }
+                    ),
+                }
+                else if ((tid == 4 || tid == 3) && degree > speakerAngle){
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        while (degree > speakerAngle){
+                        Commands.run(() -> aim.aimTurret(-0.5), aim);
+                        }
+                    ),
+                }
+
                 else if ((tid == 11 || tid == 12 || tid == 13) && intakeNote == true && (timer.getFPGATimestamp() - 150) <= 20){
                     if (currentAngle < trapAngle){ //need to create a variable for the current angle
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
+                            while (degree < trapAngle){
                             Commands.run(() -> aim.aimTurret(0.5), aim)
+                            }
                         ),
                     }
                     else if (currentAngle > trapAngle){
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
-                            Commands.run(() -> aim.aimTurret(0.5), aim)
+                            while (degree > trapAngle){
+                            Commands.run(() -> aim.aimTurret(-0.5), aim)
+                            }
                         ),
                     }
                 }
             }
             else if (DriverStation.getAlliance() == Alliance.Blue){
                 if ((tid == 6 || tid == 7 || tid == 8) && intakeNote == true){
-                    if ((tid == 6 && currentAngle < ampAngle) || ((tid == 7 || tid == 8) && currentAngle < speakerAngle)){ //need to create a variable for the current angle
+                    if (tid == 6 && degree < ampAngle){ 
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
-                            Commands.run(() -> aim.aimTurret(0.5), aim)
+                            while (degree < ampAngle){
+                            Commands.run(() -> aim.aimTurret(0.5), aim);
+                            }
                         ),
                     }
-                    else if ((tid == 5 && currentAngle > ampAngle) || ((tid == 7 || tid == 8) && currentAngle > speakerAngle)){
+                    else if (tid == 6 && degree > ampAngle){
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
-                            Commands.run(() -> aim.aimTurret(0.5), aim)
+                            Commands.run(() -> aim.aimTurret(-0.5), aim)
                         ),
                     }
                 }
-                else if ((tid == 14 || tid == 15 || tid == 16) && intakeNote == true && (timer.getFPGATimestamp() - 150) <= 20){//need to make match time variable
+                else if ((tid == 7 || tid == 8) && degree < speakerAngle){
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        while (degree < speakerAngle){
+                        Commands.run(() -> aim.aimTurret(0.5), aim);
+                        }
+                    ),
+                }
+                else if ((tid == 7 || tid == 8) && degree > speakerAngle){
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        while (degree > speakerAngle){
+                        Commands.run(() -> aim.aimTurret(-0.5), aim);
+                        }
+                    ),
+                }
+
+                else if ((tid == 14 || tid == 15 || tid == 16) && intakeNote == true && (timer.getFPGATimestamp() - 150) <= 20){
                     if (currentAngle < trapAngle){ //need to create a variable for the current angle
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
+                            while (degree < trapAngle){
                             Commands.run(() -> aim.aimTurret(0.5), aim)
+                            }
                         ),
                     }
                     else if (currentAngle > trapAngle){
                         Commands.deadline(
                             Commands.waitSeconds(0.5),
-                            Commands.run(() -> aim.aimTurret(0.5), aim)
+                            while (degree > trapAngle){
+                            Commands.run(() -> aim.aimTurret(-0.5), aim)
+                            }
                         ),
                     }
                 }
             }
 
             // Stop arm
-
-            if (tid == 5 || tid == 6) {
-                Commands.waitSeconds(abs(ampAngle - currentAngle) * degreePerSecond / speed);
-            }
-            else if (tid == 7 || tid == 8 || tid == 3 || tid == 4) {
-                Commands.waitSeconds(abs(speakerAngle - currentAngle) * degreePerSecond /speed);
-            }
-            else if (tid == 11 || tid == 12 || tid == 13 || tid == 14 || tid == 15 || tid ==16) {
-                Commands.waitSeconds(abs(trapAngle - currentAngle) * degreePerSecond /speed);
-            }
             Commands.runOnce(() -> aim.aimTurret(0), aim),
 
             // Wait a bit
@@ -123,7 +155,9 @@ public class ShootBalls extends CommandBase {
             Commands.runOnce(() -> fire2.fireTurret(0), fire2),
             intakeNote = false;
         ).handleInterrupt(() -> {
-            aim.aimTurret(0);
+            while (degree > 0){
+                aim.aimTurret(-0.5);
+            }
             intake.setIntake(0);
         }).schedule();
     }
