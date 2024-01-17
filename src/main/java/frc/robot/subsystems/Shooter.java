@@ -35,9 +35,6 @@ public class Shoot extends SubsystemBase {
     }
 
     public void stop() {
-        aim.set(0);
-        fire1.set(0);
-        fire2.set(0);
         aim.set(ControlMode.Disabled, 0);
         fire1.set(ControlMode.Disabled, 0);
         fire2.set(ControlMode.Disabled, 0);
