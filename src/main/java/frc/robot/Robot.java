@@ -33,12 +33,14 @@ public class Robot extends TimedRobot {
   private DriveTrain driveTrain;
   private Intake intake;
   private Limelight limelight;
+  private Shooter shooter;
 
   @Override
   public void robotInit() {
     driveTrain = new DriveTrain();
     intake = new Intake();
     limelight = new Limelight();
+    shooter = new Shooter();
   }
 
   @Override
@@ -131,3 +133,4 @@ public class Robot extends TimedRobot {
   public void simulationPeriodic() {
   }
 }
+
